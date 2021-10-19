@@ -4,8 +4,12 @@ from flask import current_app, g
 
 
 class Mapping:
+    @staticmethod
+    def formatTime(datestamp):
+        return datestamp.isoformat(timespec="milliseconds")
+        
     def observed_time(self, event):        
-        event_time = event['time']
+        event_time = self.formatTime(event['time'])
         return {
             'start_time': event_time,
             'end_time': event_time
@@ -74,7 +78,7 @@ class Mapping:
             'id': f'sighting-{uuid4()}',
             'targets': self.targets(event),
             'relations': self.get_relations(event),
-            'count': count,
+            'count': int(count),
             'observed_time': self.observed_time(event),
             'observables': self.observables(event),
             'short_description': f"RSA Netwitness session ID {event['sessionid']}",
