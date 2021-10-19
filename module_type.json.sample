@@ -1,0 +1,32 @@
+{
+  "title": "RSA NetWitness",
+  "default_name": "RSA NetWitness",
+  "short_description": "RSA NetWitness is an Evolved SIEM and Open XDR platform for threat detection and response.",
+  "description": "RSA NetWitness is an Evolved SIEM and Open XDR platform for threat detection and response. ",
+  "tips": "",
+  "external_references": [
+    {}
+  ],
+  "capabilities": [
+    {
+      "id": "health",
+      "description": "Health Check"
+    },
+    {
+      "id": "observe",
+      "description": "Enrichment"
+    }
+  ],
+  "properties": {
+    "auth-type": "configuration-token",
+    "configuration-token-alg": "RS256",
+    "configuration-token-audience": "https://securex.hosting.cyberthre.at",
+    "custom_jwks_host": "visibility.amp.cisco.com",
+    "url": "https://securex.hosting.cyberthre.at/integrations/rsa-netwitness",
+    "supported-apis": [
+      "health",
+      "observe/observables"
+    ]
+  },
+  "logo": "data:image/png;base64,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"
+}
