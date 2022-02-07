@@ -28,7 +28,7 @@
       "label": "Password",
       "tooltip": "RSA NetWitness API Password",
       "required": true
-    },
+    }
   ],
   "capabilities": [
     {
