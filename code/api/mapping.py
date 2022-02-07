@@ -1,5 +1,4 @@
 from uuid import uuid4
-import datetime
 from flask import current_app, g
 
 
@@ -7,7 +6,7 @@ class Mapping:
     @staticmethod
     def formatTime(datestamp):
         return datestamp.isoformat(timespec="milliseconds")
-        
+
     def observed_time(self, event):        
         event_time = self.formatTime(event['time'])
         return {
@@ -74,14 +73,15 @@ class Mapping:
         else:
             count = 1
 
-        d =  {
+        d = {
             'id': f'sighting-{uuid4()}',
             'targets': self.targets(event),
             'relations': self.get_relations(event),
             'count': int(count),
             'observed_time': self.observed_time(event),
             'observables': self.observables(event),
-            'short_description': f"RSA Netwitness session ID {event['sessionid']}",
+            'short_description':
+                f"RSA Netwitness session ID {event['sessionid']}",
             'description': 'RSA Netwitness session ID '
                            f'{event["sessionid"]} retrieved from decoder '
                            f'{event["did"]} related to '
