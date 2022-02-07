@@ -20,7 +20,6 @@ app.register_blueprint(respond_api)
 app.register_blueprint(version_api)
 
 
-
 @app.errorhandler(Exception)
 def handle_error(exception):
     app.logger.error(exception)

@@ -16,6 +16,7 @@ class ObservableSchema(Schema):
         required=True,
     )
 
+
 class NetwitnessSchema(Schema):
     sessionid = fields.Str(required=True)
     time = fields.DateTime(required=True)
