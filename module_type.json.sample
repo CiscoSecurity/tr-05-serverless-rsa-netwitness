@@ -7,6 +7,29 @@
   "external_references": [
     {}
   ],
+  "configuration_spec": [
+    {
+      "key": "custom_hostname",
+      "type": "string",
+      "label": "Host",
+      "tooltip": "RSA NetWitness API Hostname",
+      "required": true
+    },
+    {
+      "key": "custom_username",
+      "type": "api_key",
+      "label": "Username",
+      "tooltip": "RSA NetWitness API Username",
+      "required": true
+    },
+    {
+      "key": "custom_password",
+      "type": "api_key",
+      "label": "Password",
+      "tooltip": "RSA NetWitness API Password",
+      "required": true
+    },
+  ],
   "capabilities": [
     {
       "id": "health",
