@@ -4,10 +4,6 @@ import json
 class Config:
     settings = json.load(open('container_settings.json', 'r'))
     VERSION = settings['VERSION']
-    USERNAME = 'admin'
-    PASSWORD = 'netwitness'
-    IP = '10.100.20.55'
-    APIPORT = '50105'
     MAX_SEARCH_LIMIT = 500
     SEARCH_TIMEFRAME = 24   # hours
 

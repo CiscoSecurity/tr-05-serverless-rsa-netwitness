@@ -6,7 +6,7 @@ import requests
 import datetime
 from flask import request, current_app, jsonify, g
 from jwt import InvalidSignatureError, DecodeError, InvalidAudienceError
-from requests.exeptions import InvalidURL, HTTPError, SSLError, ConnectionError
+from requests.exceptions import InvalidURL, HTTPError, SSLError, ConnectionError
 from marshmallow import ValidationError
 
 from api.errors import (AuthorizationError, InvalidArgumentError,
