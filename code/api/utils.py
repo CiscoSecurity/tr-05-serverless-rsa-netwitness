@@ -141,22 +141,23 @@ def catch_errors(func):
 
 @catch_errors
 def query_sightings(indicator, credentials):
-
     host = credentials.get('host')
+    api_port = credentials.get('api_port')
     username = credentials.get('username')
     password = credentials.get('password')
 
     # first get the last time
     (mintime, maxtime) = getTimes(current_app.config['SEARCH_TIMEFRAME'],
-                                  host, username, password)
+                                  host, api_port, username, password)
     time_string = '"%s"-"%s"' % (mintime, maxtime)
 
     # doesn't appear to be a way to sort order -- it returns oldest to newest and stops at 5000 (limit)
     # we'd prefer newest to oldest
-    NW_URL = f'http://{host}:{current_app.config["APIPORT"]}/sdk?msg=msearch&' \
+    NW_URL = f'{host}:{api_port}/sdk?msg=msearch&' \
              f'force-content-type=application/json&search={indicator}&where=' \
              f'time={time_string}&limit=10000000&' \
              f'size={current_app.config["MAX_SEARCH_LIMIT"]}&flags=ci,sm'
+
     MAX_VAL = 50
 
     r = requests.get(NW_URL, auth=(username, password))
@@ -170,7 +171,7 @@ def query_sightings(indicator, credentials):
         sessions = []
         for x in range((MAX_VAL if json_count >= MAX_VAL else json_count) - 1):
             sessioninfo = getSessionInfo(
-                json_result[x]['results']['id1'], host, username, password)  # query the session
+                json_result[x]['results']['id1'], host, api_port, username, password)  # query the session
 
             try:
                 session = NetwitnessSchema().load(formatSessionInfo(sessioninfo))
@@ -192,22 +193,23 @@ def jsonify_errors(data):
     return jsonify({'errors': [data]})
 
 
-def getLastTime(host, username, password):
-    time_result = doNWQuery("select max(time)", host, username, password)
+def getLastTime(host, api_port, username, password):
+    time_result = doNWQuery("select max(time)", host, api_port, username, password)
     return datetime.datetime.utcfromtimestamp(time_result[0]['results']['fields'][0]['value'])
 
 
-def getTimes(interval, host, username, password):
+def getTimes(interval, host, api_port, username, password):
     # gets the last time and subtracts whatever time period we want (i.e. 1 hour)
-    maxtime = getLastTime(host, username, password)
+    maxtime = getLastTime(host, api_port, username, password)
     mintime = maxtime - datetime.timedelta(hours=interval)
     return (mintime, maxtime)
 
 
 @catch_errors
-def doNWQuery(query, host, username, password, limit=1):
-    NW_URL = f'http://{host}:{current_app.config["APIPORT"]}/sdk?msg=query&fo' \
+def doNWQuery(query, host, api_port, username, password, limit=1):
+    NW_URL = f'{host}:{api_port}/sdk?msg=query&fo' \
              f'rce-content-type=application/json&query={query}&limit={limit}'
+
     r = requests.get(NW_URL, auth=(username, password))
     json_result = r.json()
     return json_result
@@ -218,8 +220,8 @@ def convertEpochTime(epoch):
 
 
 @catch_errors
-def getSessionInfo(sessionid, host, username, password):
-    session_url = f'http://{host}:{current_app.config["APIPORT"]}/sdk?' \
+def getSessionInfo(sessionid, host, api_port, username, password):
+    session_url = f'{host}:{api_port}/sdk?' \
                   'msg=query&force-content-type=application/json&query=select' \
                   ' packets, did, sessionid, time, ip.src, ip.dst, ip.proto, ' \
                   'filename, username, service, alias.host, netname, ' \
