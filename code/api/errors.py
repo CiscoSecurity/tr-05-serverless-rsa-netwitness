@@ -47,7 +47,7 @@ class RSANetwitnessSSLError(TRFormattedError):
 
 
 class RSANetwitnessConnectionError(TRFormattedError):
-    def __init__(self, url):
+    def __init__(self):
         super().__init__(
             CONNECTION_ERROR,
             'Unable to connect to RSA Netwitness,'

@@ -7,7 +7,7 @@ class Mapping:
     def formatTime(datestamp):
         return datestamp.isoformat(timespec="milliseconds")
 
-    def observed_time(self, event):        
+    def observed_time(self, event):
         event_time = self.formatTime(event['time'])
         return {
             'start_time': event_time,

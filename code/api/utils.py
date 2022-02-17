@@ -6,7 +6,8 @@ import requests
 import datetime
 from flask import request, current_app, jsonify, g
 from jwt import InvalidSignatureError, DecodeError, InvalidAudienceError
-from requests.exceptions import InvalidURL, HTTPError, SSLError, ConnectionError
+from requests.exceptions import (InvalidURL, HTTPError,
+                                 SSLError, ConnectionError)
 from marshmallow import ValidationError
 
 from api.errors import (AuthorizationError, InvalidArgumentError,
@@ -151,7 +152,8 @@ def query_sightings(indicator, credentials):
                                   host, api_port, username, password)
     time_string = '"%s"-"%s"' % (mintime, maxtime)
 
-    # doesn't appear to be a way to sort order -- it returns oldest to newest and stops at 5000 (limit)
+    # doesn't appear to be a way to sort order -- it returns oldest to
+    # newest and stops at 5000 (limit)
     # we'd prefer newest to oldest
     NW_URL = f'{host}:{api_port}/sdk?msg=msearch&' \
              f'force-content-type=application/json&search={indicator}&where=' \
@@ -162,23 +164,27 @@ def query_sightings(indicator, credentials):
 
     r = requests.get(NW_URL, auth=(username, password))
     json_result = r.json()
-    
-    # ensure we got a list back.  If we get a dict, it's probably just the one liner response with the scan count
+
+    # ensure we got a list back. If we get a dict, it's probably just the one
+    # liner response with the scan count
     if isinstance(json_result, list):
         json_count = len(json_result)
 
-        # only display (MAX_VAL) (i.e. 50 records) and don't bother with the last record as its the count usually
+        # only display (MAX_VAL) (i.e. 50 records) and don't bother with the
+        # last record as its the count usually
         sessions = []
         for x in range((MAX_VAL if json_count >= MAX_VAL else json_count) - 1):
             sessioninfo = getSessionInfo(
-                json_result[x]['results']['id1'], host, api_port, username, password)  # query the session
+                json_result[x]['results']['id1'], host,
+                api_port, username, password)  # query the session
 
             try:
-                session = NetwitnessSchema().load(formatSessionInfo(sessioninfo))
+                session = NetwitnessSchema().load(
+                    formatSessionInfo(sessioninfo))
                 sessions.append(session)
             except ValidationError as err:
                 raise InvalidArgumentError(err)
-            
+
     else:
         sessions = []
 
@@ -194,12 +200,15 @@ def jsonify_errors(data):
 
 
 def getLastTime(host, api_port, username, password):
-    time_result = doNWQuery("select max(time)", host, api_port, username, password)
-    return datetime.datetime.utcfromtimestamp(time_result[0]['results']['fields'][0]['value'])
+    time_result = doNWQuery("select max(time)", host,
+                            api_port, username, password)
+    return datetime.datetime.utcfromtimestamp(
+        time_result[0]['results']['fields'][0]['value'])
 
 
 def getTimes(interval, host, api_port, username, password):
-    # gets the last time and subtracts whatever time period we want (i.e. 1 hour)
+    # gets the last time and subtracts whatever
+    # time period we want (i.e. 1 hour)
     maxtime = getLastTime(host, api_port, username, password)
     mintime = maxtime - datetime.timedelta(hours=interval)
     return (mintime, maxtime)
@@ -216,14 +225,15 @@ def doNWQuery(query, host, api_port, username, password, limit=1):
 
 
 def convertEpochTime(epoch):
-    return datetime.datetime.fromtimestamp(epoch, datetime.timezone.utc).isoformat(timespec="milliseconds")
+    return datetime.datetime.fromtimestamp(
+        epoch, datetime.timezone.utc).isoformat(timespec="milliseconds")
 
 
 @catch_errors
 def getSessionInfo(sessionid, host, api_port, username, password):
     session_url = f'{host}:{api_port}/sdk?' \
-                  'msg=query&force-content-type=application/json&query=select' \
-                  ' packets, did, sessionid, time, ip.src, ip.dst, ip.proto, ' \
+                  'msg=query&force-content-type=application/json&query=select'\
+                  ' packets, did, sessionid, time, ip.src, ip.dst, ip.proto, '\
                   'filename, username, service, alias.host, netname, ' \
                   f'direction, eth.src, eth.dst where sessionid={sessionid}&' \
                   'id1=0&id2=0&size=100000&flags=0'
