@@ -150,14 +150,14 @@ def query_sightings(indicator, credentials):
     (mintime, maxtime) = getTimes(current_app.config['SEARCH_TIMEFRAME'],
                                   url, username, password)
     time_string = '"%s"-"%s"' % (mintime, maxtime)
-
+    
     # doesn't appear to be a way to sort order -- it returns oldest to
     # newest and stops at 5000 (limit)
     # we'd prefer newest to oldest
     NW_URL = f'{url}/sdk?msg=msearch&' \
              f'force-content-type=application/json&search={indicator}&where=' \
-             f'time={time_string}&limit=10000000&' \
-             f'size={current_app.config["MAX_SEARCH_LIMIT"]}&flags=ci,sm'
+             f'time={time_string}&limit=1000000&' \
+             f'size={current_app.config["MAX_SEARCH_LIMIT"]}&flags=ci,si,sm'
 
     MAX_VAL = 50
 
@@ -175,14 +175,12 @@ def query_sightings(indicator, credentials):
         for x in range((MAX_VAL if json_count >= MAX_VAL else json_count) - 1):
             sessioninfo = getSessionInfo(
                 json_result[x]['results']['id1'], url, username, password) # query the session
-
             try:
                 session = NetwitnessSchema().load(
                     formatSessionInfo(sessioninfo))
                 sessions.append(session)
             except ValidationError as err:
                 raise InvalidArgumentError(err)
-
     else:
         sessions = []
 
