@@ -1,4 +1,5 @@
 import json
+from flask import current_app
 from json.decoder import JSONDecodeError
 
 import jwt
@@ -159,7 +160,7 @@ def query_sightings(indicator, credentials):
              f'time={time_string}&limit=1000000&' \
              f'size={current_app.config["MAX_SEARCH_LIMIT"]}&flags=ci,si,sm'
 
-    MAX_VAL = 50
+    MAX_VAL = current_app.config['MAX_SEARCH_LIMIT']
 
     r = requests.get(NW_URL, auth=(username, password))
     json_result = r.json()
@@ -172,7 +173,7 @@ def query_sightings(indicator, credentials):
         # only display (MAX_VAL) (i.e. 50 records) and don't bother with the
         # last record as its the count usually
         sessions = []
-        for x in range((MAX_VAL if json_count >= MAX_VAL else json_count) - 1):
+        for x in range(MAX_VAL if json_count >= (MAX_VAL - 1) else json_count):
             sessioninfo = getSessionInfo(
                 json_result[x]['results']['id1'], url, username, password) # query the session
             try:
