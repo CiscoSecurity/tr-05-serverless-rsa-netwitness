@@ -5,7 +5,8 @@ from flask import current_app, g
 class Mapping:
     @staticmethod
     def formatTime(datestamp):
-        return datestamp.isoformat(timespec="milliseconds")
+        return datestamp
+        #return datestamp.isoformat(timespec="milliseconds")
 
     def observed_time(self, event):
         event_time = self.formatTime(event['time'])

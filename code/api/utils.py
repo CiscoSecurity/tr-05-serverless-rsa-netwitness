@@ -1,4 +1,5 @@
 import json
+import concurrent
 from flask import current_app
 from json.decoder import JSONDecodeError
 
@@ -146,42 +147,50 @@ def query_sightings(indicator, credentials):
     url = credentials.get('url')
     username = credentials.get('username')
     password = credentials.get('password')
+    time_window = current_app.config['SEARCH_TIMEFRAME']
 
-    # first get the last time
-    (mintime, maxtime) = getTimes(current_app.config['SEARCH_TIMEFRAME'],
-                                  url, username, password)
-    time_string = '"%s"-"%s"' % (mintime, maxtime)
-    
-    # doesn't appear to be a way to sort order -- it returns oldest to
-    # newest and stops at 5000 (limit)
-    # we'd prefer newest to oldest
-    NW_URL = f'{url}/sdk?msg=msearch&' \
-             f'force-content-type=application/json&search={indicator}&where=' \
-             f'time={time_string}&limit=1000000&' \
-             f'size={current_app.config["MAX_SEARCH_LIMIT"]}&flags=ci,si,sm'
-
-    MAX_VAL = current_app.config['MAX_SEARCH_LIMIT']
+    # format the query url
+    NW_URL = f'{url}/sdk?msg=query&' \
+             f'force-content-type=application/json&' \
+             f'query=select+packets%2C+did%2C+sessionid%2C+time%2C+ip.src%2C+ip.dst%2C+ip.proto%2C+filename%2C+' \
+             f'username%2C+service%2C+alias.host%2C+netname%2C+direction%2C+eth.src%2C+eth.dst+' \
+             f'WHERE+time+%3D+rtp%28latest%2C+{time_window}h%29+-+u+' \
+             f'GROUP+BY+sessionid+ORDER+BY+time+DESC&' \
+             f'search={indicator}&' \
+             f'id1=0&id2=0&flags=0&' \
+        f'size={current_app.config["MAX_SEARCH_LIMIT"]}'
 
     r = requests.get(NW_URL, auth=(username, password))
     json_result = r.json()
 
     # ensure we got a list back. If we get a dict, it's probably just the one
     # liner response with the scan count
-    if isinstance(json_result, list):
+    if isinstance(json_result, dict):
         json_count = len(json_result)
 
-        # only display (MAX_VAL) (i.e. 50 records) and don't bother with the
-        # last record as its the count usually
+        group_fields = {}
+        session = []
+        # populate group fields with data
+        for field in json_result['results']['fields']:            
+            group_id = field['group']
+
+            # initialize if not
+            if not group_id in group_fields:
+                group_fields[group_id] = {}
+
+            type_field = field['type']
+
+            if field['format'] == 32:
+                value_field = convertEpochTime(field['value'])
+            else:
+                value_field = field['value']
+
+            group_fields[group_id][type_field] = value_field
+
         sessions = []
-        for x in range(MAX_VAL if json_count >= (MAX_VAL - 1) else json_count):
-            sessioninfo = getSessionInfo(
-                json_result[x]['results']['id1'], url, username, password) # query the session
-            try:
-                session = NetwitnessSchema().load(
-                    formatSessionInfo(sessioninfo))
+        for k, session in group_fields.items():
+            if 'time' in session:
                 sessions.append(session)
-            except ValidationError as err:
-                raise InvalidArgumentError(err)
     else:
         sessions = []
 
@@ -203,14 +212,6 @@ def getLastTime(url, username, password):
         time_result[0]['results']['fields'][0]['value'])
 
 
-def getTimes(interval, url, username, password):
-    # gets the last time and subtracts whatever
-    # time period we want (i.e. 1 hour)
-    maxtime = getLastTime(url, username, password)
-    mintime = maxtime - datetime.timedelta(hours=interval)
-    return (mintime, maxtime)
-
-
 @catch_errors
 def doNWQuery(query, url, username, password, limit=1):
     NW_URL = f'{url}/sdk?msg=query&fo' \
@@ -224,33 +225,6 @@ def doNWQuery(query, url, username, password, limit=1):
 def convertEpochTime(epoch):
     return datetime.datetime.fromtimestamp(
         epoch, datetime.timezone.utc).isoformat(timespec="milliseconds")
-
-
-@catch_errors
-def getSessionInfo(sessionid, url, username, password):
-    session_url = f'{url}/sdk?' \
-                  'msg=query&force-content-type=application/json&query=select'\
-                  ' packets, did, sessionid, time, ip.src, ip.dst, ip.proto, '\
-                  'filename, username, service, alias.host, netname, ' \
-                  f'direction, eth.src, eth.dst where sessionid={sessionid}&' \
-                  'id1=0&id2=0&size=100000&flags=0'
-    r = requests.get(session_url, auth=(username, password))
-    json_result = r.json()
-    return json_result
-
-
-def formatSessionInfo(sessioninfo):
-    cols = {}
-    for field in sessioninfo['results']['fields']:
-        type_field = field['type']
-        if field['format'] == 32:
-            value_field = convertEpochTime(field['value'])
-        else:
-            value_field = field['value']
-
-        cols[type_field] = value_field
-
-    return cols
 
 
 def format_docs(docs):

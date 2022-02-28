@@ -5,7 +5,7 @@ class Config:
     settings = json.load(open('container_settings.json', 'r'))
     VERSION = settings['VERSION']
     APIPORT = '50105'
-    MAX_SEARCH_LIMIT = 100000
+    MAX_SEARCH_LIMIT = 300
     SEARCH_TIMEFRAME = 24   # hours
 
     SOURCE = 'RSA NetWitness'
