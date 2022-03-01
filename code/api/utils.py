@@ -143,6 +143,21 @@ def catch_errors(func):
 
 
 @catch_errors
+def get_node_info(credentials):
+    url = credentials.get('url')
+    username = credentials.get('username')
+    password = credentials.get('password')
+
+    # format the query url
+    NW_URL = f'{url}/sdk?msg=info&' \
+             f'force-content-type=application/json'
+
+    r = requests.get(NW_URL, auth=(username, password))
+    json_result = r.json()
+    return json_result
+
+
+@catch_errors
 def query_sightings(indicator, credentials):
     url = credentials.get('url')
     username = credentials.get('username')
@@ -171,7 +186,7 @@ def query_sightings(indicator, credentials):
         group_fields = {}
         session = []
         # populate group fields with data
-        for field in json_result['results']['fields']:            
+        for field in json_result['results']['fields']:
             group_id = field['group']
 
             # initialize if not
