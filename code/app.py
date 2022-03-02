@@ -9,7 +9,7 @@ from api.errors import TRFormattedError
 from api.utils import jsonify_errors
 
 app = Flask(__name__)
-7
+
 app.url_map.strict_slashes = False
 app.config.from_object('config.Config')
 
