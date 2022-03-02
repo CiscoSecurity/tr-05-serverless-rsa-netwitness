@@ -1,5 +1,6 @@
 import json
 import concurrent
+import time
 from flask import current_app
 from json.decoder import JSONDecodeError
 
@@ -158,22 +159,21 @@ def get_node_info(credentials):
 
 
 @catch_errors
-def query_sightings(indicator, credentials):
+def query_sightings(indicator, credentials, search_timeframe=24, max_search_limit=300):
     url = credentials.get('url')
     username = credentials.get('username')
     password = credentials.get('password')
-    time_window = current_app.config['SEARCH_TIMEFRAME']
 
     # format the query url
     NW_URL = f'{url}/sdk?msg=query&' \
              f'force-content-type=application/json&' \
              f'query=select+packets%2C+did%2C+sessionid%2C+time%2C+ip.src%2C+ip.dst%2C+ip.proto%2C+filename%2C+' \
              f'username%2C+service%2C+alias.host%2C+netname%2C+direction%2C+eth.src%2C+eth.dst+' \
-             f'WHERE+time+%3D+rtp%28latest%2C+{time_window}h%29+-+u+' \
+             f'WHERE+time+%3D+rtp%28latest%2C+{search_timeframe}h%29+-+u+' \
              f'GROUP+BY+sessionid+ORDER+BY+time+DESC&' \
              f'search={indicator}&' \
              f'id1=0&id2=0&flags=0&' \
-        f'size={current_app.config["MAX_SEARCH_LIMIT"]}'
+        f'size={max_search_limit}'
 
     r = requests.get(NW_URL, auth=(username, password))
     json_result = r.json()
@@ -197,7 +197,6 @@ def query_sightings(indicator, credentials):
 
             if field['format'] == 32:
                 value_field = convertEpochTime(field['value'])
-                print(type(value_field))
             else:
                 value_field = field['value']
 
