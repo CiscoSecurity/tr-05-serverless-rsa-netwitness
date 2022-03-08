@@ -186,22 +186,23 @@ def query_sightings(indicator, credentials):
         group_fields = {}
         session = []
         # populate group fields with data
-        for field in json_result['results']['fields']:
-            group_id = field['group']
+        if json_result.get('results'):
+            for field in json_result['results']['fields']:
+                group_id = field['group']
 
-            # initialize if not
-            if not group_id in group_fields:
-                group_fields[group_id] = {}
+                # initialize if not
+                if not group_id in group_fields:
+                    group_fields[group_id] = {}
 
-            type_field = field['type']
+                type_field = field['type']
 
-            if field['format'] == 32:
-                value_field = convertEpochTime(field['value'])
-                print(type(value_field))
-            else:
-                value_field = field['value']
+                if field['format'] == 32:
+                    value_field = convertEpochTime(field['value'])
+                    print(type(value_field))
+                else:
+                    value_field = field['value']
 
-            group_fields[group_id][type_field] = value_field
+                group_fields[group_id][type_field] = value_field
 
         sessions = []
         for k, session in group_fields.items():
