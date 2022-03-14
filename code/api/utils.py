@@ -1,20 +1,16 @@
 import json
-import concurrent
-from flask import current_app
+import datetime
 from json.decoder import JSONDecodeError
 
 import jwt
 import requests
-import datetime
 from flask import request, current_app, jsonify, g
 from jwt import InvalidSignatureError, DecodeError, InvalidAudienceError
 from requests.exceptions import (InvalidURL, HTTPError,
                                  SSLError, ConnectionError)
-from marshmallow import ValidationError
 
 from api.errors import (AuthorizationError, InvalidArgumentError,
                         RSANetwitnessSSLError, RSANetwitnessConnectionError)
-from api.schemas import NetwitnessSchema
 
 NO_AUTH_HEADER = 'Authorization header is missing'
 WRONG_AUTH_TYPE = 'Wrong authorization type'
@@ -167,13 +163,14 @@ def query_sightings(indicator, credentials):
     # format the query url
     NW_URL = f'{url}/sdk?msg=query&' \
              f'force-content-type=application/json&' \
-             f'query=select+packets%2C+did%2C+sessionid%2C+time%2C+ip.src%2C+ip.dst%2C+ip.proto%2C+filename%2C+' \
-             f'username%2C+service%2C+alias.host%2C+netname%2C+direction%2C+eth.src%2C+eth.dst+' \
+             f'query=select+packets%2C+did%2C+sessionid%2C+time%2C+ip.src' \
+             f'%2C+ip.dst%2C+ip.proto%2C+filename%2C+username%2C+service%2' \
+             f'C+alias.host%2C+netname%2C+direction%2C+eth.src%2C+eth.dst+' \
              f'WHERE+time+%3D+rtp%28latest%2C+{time_window}h%29+-+u+' \
              f'GROUP+BY+sessionid+ORDER+BY+time+DESC&' \
              f'search={indicator}&' \
              f'id1=0&id2=0&flags=0&' \
-        f'size={current_app.config["MAX_SEARCH_LIMIT"]}'
+             f'size={current_app.config["MAX_SEARCH_LIMIT"]}'
 
     r = requests.get(NW_URL, auth=(username, password))
     json_result = r.json()
@@ -181,7 +178,6 @@ def query_sightings(indicator, credentials):
     # ensure we got a list back. If we get a dict, it's probably just the one
     # liner response with the scan count
     if isinstance(json_result, dict):
-        json_count = len(json_result)
 
         group_fields = {}
         session = []
@@ -191,7 +187,7 @@ def query_sightings(indicator, credentials):
                 group_id = field['group']
 
                 # initialize if not
-                if not group_id in group_fields:
+                if group_id not in group_fields:
                     group_fields[group_id] = {}
 
                 type_field = field['type']
