@@ -22,8 +22,7 @@ def client():
 @fixture(scope='session')
 def valid_jwt(client):
     def _make_jwt(
-            host='test_host.com',
-            api_port='50105',
+            url='test_host.com',
             username='username',
             password='password',
             jwks_host='visibility.amp.cisco.com',
@@ -33,8 +32,7 @@ def valid_jwt(client):
             wrong_jwks_host=False,
     ):
         payload = {
-            'host': host,
-            'api_port': api_port,
+            'url': url,
             'username': username,
             'password': password,
             'jwks_host': jwks_host,
