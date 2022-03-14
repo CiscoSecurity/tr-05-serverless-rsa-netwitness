@@ -6,9 +6,8 @@ from pytest import fixture
 from tests.unit.api.utils import get_headers
 from tests.unit.conftest import mock_api_response
 from tests.unit.payloads_for_tests import (EXPECTED_RESPONSE_OF_JWKS_ENDPOINT,
-                                           EXPECTED_PAYLOAD_FROM_NW_LAST_TIMES,
                                            EXPECTED_PAYLOAD_SEARCH,
-                                           EXPECTED_RESPONSE_SESSION_INFO,)
+                                           EXPECTED_RESPONSE_OBSERVE,)
 
 
 def routes():
@@ -17,9 +16,15 @@ def routes():
 
 def expected_responses():
     yield mock_api_response(payload=EXPECTED_RESPONSE_OF_JWKS_ENDPOINT)
-    yield mock_api_response(payload=EXPECTED_PAYLOAD_FROM_NW_LAST_TIMES)
     yield mock_api_response(payload=EXPECTED_PAYLOAD_SEARCH)
-    yield mock_api_response(payload=EXPECTED_RESPONSE_SESSION_INFO)
+
+
+def ids():
+    yield '63b847c9-4429-4328-804a-5a06c2d03f9f'
+    yield 'c54d2bfa-a710-42af-92f2-f3a628b89c15'
+    yield '806b4eb2-18da-4322-bf7d-3701823a87e5'
+    yield 'da992d05-3f6e-4433-89cd-67208df067c8'
+    yield '78a6ba52-4353-43b2-9308-b5886f387682'
 
 
 @fixture(scope='module', params=routes(), ids=lambda route: f'POST {route}')
@@ -51,13 +56,16 @@ def test_enrich_call_with_valid_jwt_but_invalid_json_value(
 
 @fixture(scope='module')
 def valid_json():
-    return [{'type': 'ip', 'value': '0.0.0.0'}]
+    return [{'type': 'ip', 'value': '52.3.199.104'}]
 
 
+@patch('api.mapping.uuid4')
 @patch('requests.get')
-def test_enrich_call_success(mock_request,
+def test_enrich_call_success(mock_request, mock_id,
                              route, client, valid_jwt, valid_json):
+    mock_id.side_effect = ids()
     mock_request.side_effect = expected_responses()
     response = client.post(route, headers=get_headers(valid_jwt()),
                            json=valid_json)
     assert response.status_code == HTTPStatus.OK
+    assert response.json == EXPECTED_RESPONSE_OBSERVE

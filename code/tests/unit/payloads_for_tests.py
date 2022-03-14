@@ -104,47 +104,205 @@ mdUxHwi1ulkspAn/fmY7f0hZpskDwcHyZmbKZuk+NU/FJ8IAcmvk9y7m25nSSc8=
 -----END RSA PRIVATE KEY-----"""
 
 
-EXPECTED_PAYLOAD_SEARCH = [
-    {
-        'flags': 1074200578,
-        'results': {
-            'id1': 4708930,
-            'id2': 4708930,
-            'fields':
-                [
-                    {'id1': 4708930,
-                     'id2': 4708930,
-                     'count': 0,
-                     'format': 65,
-                     'type': 'hit',
-                     'flags': 0,
-                     'group': 4708930,
-                     'value': '0.0.0.0'
-                     }
-                ]
-        }
-    },
-    {
-        'flags': 1074200578,
-        'results':
+EXPECTED_PAYLOAD_SEARCH = {
+    'flags': 1074200577,
+    'results': {
+        'id1': 631857223,
+        'id2': 631857222,
+        'fields': [
             {
-                'id1': 4711346,
-                'id2': 4711346,
-                'fields': [
-                    {
-                        'id1': 4711346,
-                        'id2': 4711346,
-                        'count': 0,
-                        'format': 65,
-                        'type': 'hit',
-                        'flags': 0,
-                        'group': 4711346,
-                        'value': '0.0.0.0'
-                    }
-                ]
-            }
+                'id1': 626124548,
+                'id2': 626124548,
+                'count': 0,
+                'format': 32,
+                'type': 'time',
+                'flags': 0,
+                'group': 0,
+                'value': 1646696275
+            },
+            {
+                'id1': 626124547,
+                'id2': 626124547,
+                'count': 0,
+                'format': 8,
+                'type': 'sessionid',
+                'flags': 0,
+                'group': 0,
+                'value': '20153218'
+            },
+            {
+                'id1': 626124550,
+                'id2': 626124550,
+                'count': 0,
+                'format': 65,
+                'type': 'did',
+                'flags': 0,
+                'group': 0,
+                'value': 'nwpackets'
+            },
+            {
+                'id1': 626124566,
+                'id2': 626124566,
+                'count': 0,
+                'format': 6,
+                'type': 'packets',
+                'flags': 0,
+                'group': 0,
+                'value': '2'
+            },
+            {
+                'id1': 626124579,
+                'id2': 626124579,
+                'count': 0,
+                'format': 32,
+                'type': 'time',
+                'flags': 0,
+                'group': 1,
+                'value': 1646696275
+            },
+            {
+                'id1': 626124578,
+                'id2': 626124578,
+                'count': 0,
+                'format': 8,
+                'type': 'sessionid',
+                'flags': 0,
+                'group': 1,
+                'value': '20153219'
+            },
+            {
+                'id1': 626124581,
+                'id2': 626124581,
+                'count': 0,
+                'format': 65,
+                'type': 'did',
+                'flags': 0,
+                'group': 1,
+                'value': 'nwpackets'
+            },
+            {
+                'id1': 626124597,
+                'id2': 626124597,
+                'count': 0,
+                'format': 6,
+                'type': 'packets',
+                'flags': 0,
+                'group': 1,
+                'value': '2'
+            },
+            {
+                'id1': 625138051,
+                'id2': 625138051,
+                'count': 0,
+                'format': 32,
+                'type': 'time',
+                'flags': 0,
+                'group': 2,
+                'value': 1646693316
+            },
+            {
+                'id1': 625138050,
+                'id2': 625138050,
+                'count': 0,
+                'format': 8,
+                'type': 'sessionid',
+                'flags': 0,
+                'group': 2,
+                'value': '20122343'
+            },
+            {
+                'id1': 625138053,
+                'id2': 625138053,
+                'count': 0,
+                'format': 65,
+                'type': 'did',
+                'flags': 0,
+                'group': 2,
+                'value': 'nwpackets'
+            },
+            {
+                'id1': 625138069,
+                'id2': 625138069,
+                'count': 0,
+                'format': 6,
+                'type': 'packets',
+                'flags': 0,
+                'group': 2,
+                'value': '2'
+            },
+            {
+                'id1': 625138082,
+                'id2': 625138082,
+                'count': 0,
+                'format': 32,
+                'type': 'time',
+                'flags': 0,
+                'group': 3,
+                'value': 1646693316
+            },
+            {
+                'id1': 625138081,
+                'id2': 625138081,
+                'count': 0,
+                'format': 8,
+                'type': 'sessionid',
+                'flags': 0,
+                'group': 3,
+                'value': '20122344'
+            },
+            {
+                'id1': 625138084,
+                'id2': 625138084,
+                'count': 0,
+                'format': 65,
+                'type': 'did',
+                'flags': 0,
+                'group': 3,
+                'value': 'nwpackets'
+            },
+            {
+                'id1': 625138100,
+                'id2': 625138100,
+                'count': 0,
+                'format': 6,
+                'type': 'packets',
+                'flags': 0,
+                'group': 3,
+                'value': '3'
+            },
+            {
+                'id1': 619115576,
+                'id2': 619115576,
+                'count': 0,
+                'format': 32,
+                'type': 'time',
+                'flags': 0,
+                'group': 4,
+                'value': 1646675302
+            },
+            {
+                'id1': 619115575,
+                'id2': 619115575,
+                'count': 0,
+                'format': 8,
+                'type': 'sessionid',
+                'flags': 0,
+                'group': 4,
+                'value': '19934075'
+            },
+            {
+                'id1': 619115578,
+                'id2': 619115578,
+                'count': 0,
+                'format': 65,
+                'type': 'did',
+                'flags': 0,
+                'group': 4,
+                'value': 'nwpackets'
+            },
+        ]
     }
-]
+}
 
 
 EXPECTED_PAYLOAD_FROM_NW_LAST_TIMES = [
@@ -178,42 +336,111 @@ EXPECTED_PAYLOAD_FROM_NW_LAST_TIMES = [
 ]
 
 
-EXPECTED_RESPONSE_SESSION_INFO = {
-    'flags': 1074200577,
-    'results': {
-        'id1': 145675943,
-        'id2': 145675942,
-        'fields': [
-            {
-                'id1': 138814436,
-                'id2': 138814436,
-                'count': 0,
-                'format': 8,
-                'type': 'sessionid',
-                'flags': 0,
-                'group': 4708930,
-                'value': '4708930'
-            },
-            {
-                'id1': 138814437,
-                'id2': 138814437,
-                'count': 0,
-                'format': 32,
-                'type': 'time',
-                'flags': 0,
-                'group': 4708930,
-                'value': 1644971658
-            },
-            {
-                'id1': 138814439,
-                'id2': 138814439,
-                'count': 0,
-                'format': 65,
-                'type': 'did',
-                'flags': 0,
-                'group': 4708930,
-                'value': 'nwpackets'
-            }
-        ]
+EXPECTED_RESPONSE_OBSERVE = {
+    'data': {
+        'sightings': {
+            'count': 5,
+            'docs': [
+                {
+                    'confidence': 'High',
+                    'count': 2,
+                    'description': 'RSA Netwitness session ID 20153218 retrie'
+                                   'ved from decoder nwpackets related to 52.'
+                                   '3.199.104',
+                    'id': 'sighting-63b847c9-4429-4328-804a-5a06c2d03f9f',
+                    'observables': [
+                        {'type': 'ip', 'value': '52.3.199.104'}
+                    ],
+                    'observed_time': {
+                        'end_time': '2022-03-07T23:37:55.000000Z',
+                        'start_time': '2022-03-07T23:37:55.000000Z'
+                    },
+                    'relations': [],
+                    'schema_version': '1.1.4',
+                    'short_description': 'RSA Netwitness session ID 20153218',
+                    'source': 'RSA NetWitness',
+                    'targets': [],
+                    'type': 'sighting'
+                },
+                {
+                    'confidence': 'High',
+                    'count': 2,
+                    'description': 'RSA Netwitness session ID 20153219 retrie'
+                                   'ved from decoder nwpackets related to 52.'
+                                   '3.199.104',
+                    'id': 'sighting-c54d2bfa-a710-42af-92f2-f3a628b89c15',
+                    'observables': [
+                        {'type': 'ip', 'value': '52.3.199.104'}
+                    ],
+                    'observed_time': {
+                        'end_time': '2022-03-07T23:37:55.000000Z',
+                        'start_time': '2022-03-07T23:37:55.000000Z'
+                    },
+                    'relations': [],
+                    'schema_version': '1.1.4',
+                    'short_description': 'RSA Netwitness session ID 20153219',
+                    'source': 'RSA NetWitness',
+                    'targets': [],
+                    'type': 'sighting'
+                },
+                {
+                    'confidence': 'High',
+                    'count': 2,
+                    'description': 'RSA Netwitness session ID 20122343 retrie'
+                                   'ved from decoder nwpackets related to 52.'
+                                   '3.199.104',
+                    'id': 'sighting-806b4eb2-18da-4322-bf7d-3701823a87e5',
+                    'observables': [{'type': 'ip', 'value': '52.3.199.104'}],
+                    'observed_time': {
+                        'end_time': '2022-03-07T22:48:36.000000Z',
+                        'start_time': '2022-03-07T22:48:36.000000Z'
+                    },
+                    'relations': [],
+                    'schema_version': '1.1.4',
+                    'short_description': 'RSA Netwitness session ID 20122343',
+                    'source': 'RSA NetWitness',
+                    'targets': [],
+                    'type': 'sighting'
+                },
+                {
+                    'confidence': 'High',
+                    'count': 3,
+                    'description': 'RSA Netwitness session ID 20122344 retrie'
+                                   'ved from decoder nwpackets related to 52.'
+                                   '3.199.104',
+                    'id': 'sighting-da992d05-3f6e-4433-89cd-67208df067c8',
+                    'observables': [{'type': 'ip', 'value': '52.3.199.104'}],
+                    'observed_time': {
+                        'end_time': '2022-03-07T22:48:36.000000Z',
+                        'start_time': '2022-03-07T22:48:36.000000Z'
+                    },
+                    'relations': [],
+                    'schema_version': '1.1.4',
+                    'short_description': 'RSA Netwitness session ID 20122344',
+                    'source': 'RSA NetWitness',
+                    'targets': [],
+                    'type': 'sighting'
+                },
+                {
+                    'confidence': 'High',
+                    'count': 1,
+                    'description': 'RSA Netwitness session ID 19934075 retrie'
+                                   'ved from decoder nwpackets related to 52.'
+                                   '3.199.104',
+                    'id': 'sighting-78a6ba52-4353-43b2-9308-b5886f387682',
+                    'observables': [{'type': 'ip', 'value': '52.3.199.104'}],
+                    'observed_time': {
+                        'end_time': '2022-03-07T17:48:22.000000Z',
+                        'start_time': '2022-03-07T17:48:22.000000Z'
+                    },
+                    'relations': [],
+                    'schema_version': '1.1.4',
+                    'short_description': 'RSA Netwitness session ID 19934075',
+                    'source': 'RSA NetWitness',
+                    'targets': [],
+                    'type': 'sighting'
+                }
+            ]
+        }
     }
 }

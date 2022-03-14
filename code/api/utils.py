@@ -194,7 +194,6 @@ def query_sightings(indicator, credentials):
 
                 if field['format'] == 32:
                     value_field = convertEpochTime(field['value'])
-                    print(type(value_field))
                 else:
                     value_field = field['value']
 
@@ -232,6 +231,7 @@ def doNWQuery(query, url, username, password, limit=1):
 
     r = requests.get(NW_URL, auth=(username, password))
     json_result = r.json()
+    print(json_result)
     return json_result
 
 
