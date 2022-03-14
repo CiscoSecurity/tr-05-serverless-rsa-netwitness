@@ -26,6 +26,14 @@ class AuthorizationError(TRFormattedError):
         )
 
 
+class WatchdogError(TRFormattedError):
+    def __init__(self):
+        super().__init__(
+            code='health check failed',
+            message='Invalid Health Check'
+        )
+
+
 class InvalidArgumentError(TRFormattedError):
     def __init__(self, message):
         super().__init__(
