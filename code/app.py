@@ -7,6 +7,7 @@ from api.health import health_api
 from api.version import version_api
 from api.errors import TRFormattedError
 from api.utils import jsonify_errors
+from api.watchdog import watchdog_api
 
 app = Flask(__name__)
 
@@ -16,17 +17,20 @@ app.config.from_object('config.Config')
 app.register_blueprint(enrich_api)
 app.register_blueprint(health_api)
 app.register_blueprint(version_api)
+app.register_blueprint(watchdog_api)
 
 
 @app.errorhandler(Exception)
 def handle_error(exception):
-    app.logger.error(traceback.format_exc())
     code = getattr(exception, 'code', 500)
     message = getattr(exception, 'description', 'Something went wrong.')
     reason = '.'.join([
         exception.__class__.__module__,
         exception.__class__.__name__,
     ])
+
+    if code != 404:
+        app.logger.error(traceback.format_exc())
 
     response = jsonify(code=code, message=message, reason=reason)
     return response, code

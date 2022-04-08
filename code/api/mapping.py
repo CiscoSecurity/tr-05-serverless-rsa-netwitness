@@ -6,7 +6,7 @@ class Mapping:
     @staticmethod
     def formatTime(datestamp):
         return datestamp
-        #return datestamp.isoformat(timespec="milliseconds")
+        # return datestamp.isoformat(timespec="milliseconds")
 
     def observed_time(self, event):
         event_time = self.formatTime(event['time'])
