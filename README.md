@@ -1,4 +1,4 @@
-# RSA Netwitness (Proof-of-Concept)
+# RSA Netwitness (Deprecated in favour of SSE version)
 
 A Cisco SecureX Concrete Relay implementation using [RSA Netwitness](https://www.rsa.com/) as a third-party Cyber Threat Intelligence service provider.
 
